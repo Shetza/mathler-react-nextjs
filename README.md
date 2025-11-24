@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mathler — Next.js 13 + React + TypeScript
 
-## Getting Started
+![Demo Screenshot](./screenshot.png)
 
-First, run the development server:
+## 🎯 Présentation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Mathler est un jeu inspiré de **Mathler**, combinant calcul mental et logique de type Wordle.  
+Le joueur doit deviner l’équation du jour. Chaque caractère de la tentative est évalué :  
+
+- `correct` : caractère à la bonne position  
+- `present` : caractère présent mais mal placé  
+- `absent` : caractère inexistant dans la solution  
+
+L’objectif est de reproduire une architecture **fullstack moderne** avec un front-end interactif, une API backend pour la logique métier et une gestion d’état propre.
+
+---
+
+## 🛠️ Technologies utilisées
+
+- **Next.js 13** (App Router + React 18)  
+- **React + TypeScript**  
+- **Tailwind CSS** pour le styling rapide et responsive  
+- **Jest + ts-jest** pour les tests unitaires  
+- **SPA navigation** via `<Link>` et App Router  
+- **Context API** pour le state global (solution)  
+
+---
+
+## 🏗️ Architecture
+
+```txt
+src/
+  app/
+    layout.tsx           # Layout global avec header/navigation
+    page.tsx             # Page Home (GameBoard)
+    rules/page.tsx       # Page règles du jeu
+    history/page.tsx     # Page historique
+    api/
+      solution/route.ts  # API GET solution
+      check/route.ts     # API POST évaluation guess
+  components/
+    GameBoard.tsx
+    Keypad.tsx
+    KeyButton.tsx
+    GuessRow.tsx
+  context/
+    SolutionContext.tsx
+  domain/
+    evaluator.ts         # logique métier évaluation
+tests/
+  unit/
+    evaluator.test.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚡ Fonctionnement
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Récupération de la solution**  
+   - La solution du jour est récupérée via `/api/solution`.  
+   - Stockée dans un **Context React** pour éviter les fetchs multiples (SPA + Strict Mode dev).  
 
-## Learn More
+2. **Saisie du joueur**  
+   - Clavier virtuel (`Keypad`) → gestion de l’état local `currentGuess`.  
+   - Suppression avec `⌫` et validation avec `OK`.  
 
-To learn more about Next.js, take a look at the following resources:
+3. **Évaluation du guess**  
+   - Chaque tentative est envoyée à l’API `/api/check` ou évaluée localement via `evaluateGuess`.  
+   - Résultat : tableau de `correct / present / absent`.  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. **Affichage des résultats**  
+   - Chaque guess est affichée avec des carrés colorés :  
+     - Vert = correct  
+     - Jaune = present  
+     - Gris = absent  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. **Navigation SPA**  
+   - `<Link>` et App Router → navigation fluide entre `Home`, `Rules`, `History`.  
+   - Pas de rechargement complet du navigateur.  
 
-## Deploy on Vercel
+6. **Tests unitaires**  
+   - `evaluator.ts` testé avec Jest (`tests/unit/evaluator.test.ts`).  
+   - Couvre : match exact, lettres correct/present, doublons et erreurs de longueur.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🎨 Choix techniques
+
+- **Next.js 13 App Router** : structure moderne, routage flexible, SSR hybride.  
+- **Context API** pour solution globale → évite double fetch en dev.  
+- **TypeScript** pour sécurité des types et meilleure lisibilité du code.  
+- **Tailwind CSS** : rapide à utiliser, design responsive et minimal.  
+- **SPA navigation** via `<Link>` → expérience utilisateur fluide.  
+- **Séparation front / back** : logique métier dans `/domain` → testable indépendamment.  
+
+---
+
+## 🧪 Lancer le projet
+
+1. Installer les dépendances :
+
+```bash
+npm install
+npm run dev
+```
+
+Visiter : `http://localhost:3000`
+
+Tester la logique métier :
+
+```bash
+npm test
+```
+
+## 🚀 Points clés de l’implémentation
+
+- Architecture front / back séparée pour un code modulaire et maintenable
+- SPA avec routing client-side fluide via `<Link>` et App Router
+- State global propre pour la solution via Context API, évitant les fetchs redondants
+- Tests unitaires avec Jest pour la logique métier (`evaluateGuess`)
+- Code TypeScript strict et bien structuré
+- API backend minimaliste mais fonctionnelle
+
+---
+
+## 📌 Améliorations possibles
+
+- Historique des parties en `localStorage` ou backend
+- Génération dynamique de la solution du jour
+- Limitation du nombre de tentatives et gestion victoire/défaite
+- Animations CSS pour feedback utilisateur (bounce, shake, etc.)
+- Support mobile complet et responsive
