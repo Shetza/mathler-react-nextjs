@@ -21,6 +21,7 @@ L’objectif est de reproduire une architecture **fullstack moderne** avec un fr
 - **React + TypeScript**  
 - **Tailwind CSS** pour le styling rapide et responsive  
 - **Jest + ts-jest** pour les tests unitaires  
+- **Playwright** pour les tests E2E (end-to-end)  
 - **SPA navigation** via `<Link>` et App Router  
 - **Context API** pour le state global (solution)  
 
@@ -48,8 +49,10 @@ src/
   domain/
     evaluator.ts         # logique métier évaluation
 tests/
-  unit/
+  unit/        # tests Jest unitaires
     evaluator.test.ts
+  e2e/         # tests Playwright end-to-end
+    game.spec.ts
 ```
 
 ---
@@ -97,20 +100,45 @@ tests/
 
 ## 🧪 Lancer le projet
 
-1. Installer les dépendances :
+1. Installation
 
 ```bash
 npm install
+```
+
+2. Lancer le serveur dev
+
+```bash
 npm run dev
 ```
 
 Visiter : `http://localhost:3000`
 
-Tester la logique métier :
+---
+
+## 🧪 Tester la logique métier
+
+### Tests unitaires (Jest)
 
 ```bash
 npm test
 ```
+
+- Ces tests se trouvent dans tests/unit/
+- Testent uniquement la logique métier (evaluateGuess)
+- Ne touchent pas l’interface ni le navigateur
+
+### Tests E2E (Playwright)
+
+
+```bash
+npm run test:e2e // identique à npx playwright test
+```
+
+- Ces tests se trouvent dans tests/e2e/
+- Simulent des interactions réelles dans un navigateur
+- Vérifient le GameBoard, la saisie des touches, et la navigation SPA
+- Playwright peut démarrer automatiquement le serveur Next.js si nécessaire (via webServer config)
 
 ## 🚀 Points clés de l’implémentation
 
@@ -118,6 +146,7 @@ npm test
 - SPA avec routing client-side fluide via `<Link>` et App Router
 - State global propre pour la solution via Context API, évitant les fetchs redondants
 - Tests unitaires avec Jest pour la logique métier (`evaluateGuess`)
+- Tests E2E avec Playwright pour valider les interactions utilisateur
 - Code TypeScript strict et bien structuré
 - API backend minimaliste mais fonctionnelle
 

@@ -37,7 +37,7 @@ export function GameBoard() {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div id="game-board" className="flex flex-col items-center">
       {guesses.map((guess, i) => (
         <div key={i}>
           <GuessRow value={guess} maxLength={maxLength} />

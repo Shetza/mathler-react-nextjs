@@ -4,8 +4,11 @@ const tsJestTransformCfg = createDefaultPreset().transform;
 
 /** @type {import("jest").Config} **/
 module.exports = {
-  preset: 'ts-jest',
   testEnvironment: "node",
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "/tests/e2e/"  // <-- Ignore les tests Playwright
+  ],
   transform: {
     ...tsJestTransformCfg,
   },
