@@ -58,9 +58,8 @@
     -   `docker run`
 -   Playwright en Docker nécessite les dépendances Chromium.
 
-## 8. README professionnel
+## 8. README
 
--   Ne pas mentionner explicitement les recruteurs.
 -   Expliquer l'architecture, les choix techniques, la gestion des
     tests.
 -   Expliquer comment lancer l'application et les tests.
